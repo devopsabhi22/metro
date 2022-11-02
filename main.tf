@@ -1,44 +1,34 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-      version = "3.29.1"
-    }
+provider "azurerm" {
+  features {}
+}
+
+resource "azurerm_resource_group" "default" {
+  name     = "tamops"
+  location = "Central India"
+
+  tags = {
+    environment = "Production"
   }
 }
 
-provider "azurerm" {
-  subscription_id = "8c025d2f-997e-48be-85fa-46c16fb17787"
-  tenant_id = "f2dae003-d3ab-460f-8872-5434ebaf2fed"
-  client_id = "f1b6cbb4-4021-4ba5-8512-0973d6013c1d"
-  client_secret = "exv8Q~SCHrCdXWlArSqDVgrIzDG6ZbL3FPAQrdrZ"
-features {
-    }  
-}
-
-resource "azurerm_resource_group" "aksgroup" {
-  name     = "aks-cluster1"
-  location = "Central India"
-}
-
 resource "azurerm_container_registry" "acr" {
-  name                = "testakscontainerRegistry"
-  resource_group_name = azurerm_resource_group.aksgroup.name
-  location            = azurerm_resource_group.aksgroup.location
-  sku                 = "Premium"
-  admin_enabled       = false
+  name                = "akscontainerRegistry1233"
+  resource_group_name = azurerm_resource_group.default.name
+  location            = "Central India"
+  sku                 = "Standard"
+  admin_enabled       = true
 }
 
-resource "azurerm_kubernetes_cluster" "akscluster" {
-  name                = "testcluster-aks"
-  location            = azurerm_resource_group.aksgroup.location
-  resource_group_name = azurerm_resource_group.aksgroup.name
+resource "azurerm_kubernetes_cluster" "akscluster1" {
+  name                = "cluster-aks1233"
+  location            = "Central India"
+  resource_group_name = azurerm_resource_group.default.name
   dns_prefix          = "exampleaks12"
 
   default_node_pool {
     name       = "default"
     node_count = 1
-    vm_size    = "Standard_D2_v2"
+    vm_size    = "standard_d2"
   }
 
   identity {
@@ -46,10 +36,9 @@ resource "azurerm_kubernetes_cluster" "akscluster" {
   }
 
   tags = {
-    Environment = "Test"
+    Environment = "Production"
   }
 }
-
 
 
 output "acr_login_server" {
