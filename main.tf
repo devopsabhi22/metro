@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "default" {
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "akscontainerRegistry1233"
+  name                = "akscontainerRegistry1thanos"
   resource_group_name = azurerm_resource_group.default.name
   location            = "Central India"
   sku                 = "Standard"
